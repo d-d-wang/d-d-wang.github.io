@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name — Researcher &amp; Developer</title>
+  <meta name="description" content="Personal academic website of [Your Name] — researcher in [field], PhD candidate at [University]." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg:        #0e0e0e;
+      --surface:   #161616;
+      --border:    #2a2a2a;
+      --muted:     #555;
+      --body:      #a8a090;
+      --cream:     #e8e0d0;
+      --white:     #f4f0e8;
+      --amber:     #d4922a;
+      --amber-dim: #9a6418;
+      --amber-glow:rgba(212,146,42,.12);
+      --red:       #c0392b;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-mono:    'DM Mono', 'Courier New', monospace;
+      --font-body:    'Outfit', sans-serif;
+
+      --ease-out: cubic-bezier(.16,1,.3,1);
+      --ease-in:  cubic-bezier(.7,0,.84,0);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    ::selection { background: var(--amber); color: var(--bg); }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { display: block; max-width: 100%; }
+
+    /* ═══════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════ */
+    #cursor {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .15s var(--ease-out), height .15s var(--ease-out), background .15s;
+      mix-blend-mode: screen;
+    }
+    #cursor.hovered {
+      width: 36px; height: 36px;
+      background: transparent;
+      border: 1.5px solid var(--amber);
+      mix-blend-mode: normal;
+    }
+
+    /* ═══════════════════════════════════════════
+       DOT-GRID CANVAS (HERO BACKGROUND)
+    ═══════════════════════════════════════════ */
+    #dot-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .45;
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT UTILITIES
+    ═══════════════════════════════════════════ */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    section { position: relative; z-index: 1; }
+
+    /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.4rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(14,14,14,.98) 0%, transparent 100%);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, background .3s;
+    }
+    nav.scrolled {
+      border-color: var(--border);
+      background: rgba(14,14,14,.96);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .02em;
+    }
+    .nav-logo span { color: var(--amber); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width .25s var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* hamburger */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-burger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--cream);
+      transition: transform .3s, opacity .3s;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 8rem;
+      padding-top: 8rem;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp .8s .2s var(--ease-out) forwards;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--white);
+      letter-spacing: -.02em;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .9s .35s var(--ease-out) forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    .hero-role {
+      margin-top: 2rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--body);
+      max-width: 560px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp .9s .5s var(--ease-out) forwards;
+    }
+
+    .hero-ctas {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp .9s .65s var(--ease-out) forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.75rem;
+      background: var(--amber);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: background .2s, transform .2s;
+    }
+    .btn-primary:hover {
+      background: var(--cream);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.75rem;
+      border: 1px solid var(--border);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--amber);
+      background: var(--amber-glow);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp .8s 1.1s var(--ease-out) forwards;
+    }
+    .hero-scroll-hint::before {
+      content: '';
+      display: block;
+      width: 30px; height: 1px;
+      background: var(--muted);
+    }
+    .scroll-arrow {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .scroll-arrow span {
+      display: block;
+      width: 1px; height: 8px;
+      background: var(--muted);
+      margin: 0 auto;
+      animation: scrollBob 1.8s ease-in-out infinite;
+    }
+    .scroll-arrow span:nth-child(2) { animation-delay: .15s; }
+    .scroll-arrow span:nth-child(3) { animation-delay: .3s; }
+
+    /* ═══════════════════════════════════════════
+       SECTION STRUCTURE
+    ═══════════════════════════════════════════ */
+    .section-wrap {
+      padding: 7rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--amber);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .section-title em { font-style: italic; color: var(--cream); }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--body);
+      max-width: 500px;
+      line-height: 1.75;
+    }
+
+    /* ═══════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════ */
+    #about .about-photo-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .about-photo-frame {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .about-photo-frame::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1px solid var(--amber);
+      transform: translate(8px, 8px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .about-photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter .4s;
+    }
+    .about-photo-frame:hover img { filter: grayscale(0%) contrast(1); }
+
+    /* placeholder avatar */
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      color: var(--muted);
+    }
+    .photo-placeholder svg { opacity: .4; }
+    .photo-placeholder p {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-align: center;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .stat-box {
+      background: var(--surface);
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--amber);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: .35rem;
+    }
+
+    .about-text-col { padding-top: .5rem; }
+
+    .about-bio {
+      font-size: 1rem;
+      color: var(--body);
+      line-height: 1.85;
+      margin-bottom: 2rem;
+    }
+    .about-bio p { margin-bottom: 1rem; }
+    .about-bio strong { color: var(--cream); font-weight: 500; }
+    .about-bio a {
+      color: var(--amber);
+      border-bottom: 1px solid var(--amber-dim);
+      transition: border-color .2s;
+    }
+    .about-bio a:hover { border-color: var(--amber); }
+
+    .about-interests {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 2.5rem;
+    }
+    .interest-tag {
+      padding: .3rem .85rem;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--body);
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .interest-tag:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: var(--amber-glow);
+    }
+
+    .about-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .icon-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem 1rem;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--body);
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .icon-link:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: var(--amber-glow);
+    }
+
+    /* ═══════════════════════════════════════════
+       PUBLICATIONS
+    ═══════════════════════════════════════════ */
+    .pub-list { margin-top: 3rem; }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 3.5rem 1fr;
+      gap: 0 1.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .pub-item:first-child { border-top: 1px solid var(--border); }
+
+    .pub-year {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      padding-top: .2rem;
+    }
+
+    .pub-content {}
+
+    .pub-badges {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+      margin-bottom: .6rem;
+    }
+    .badge {
+      padding: .15rem .6rem;
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+    .badge-venue {
+      background: var(--amber-glow);
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+    }
+    .badge-award {
+      background: rgba(192,57,43,.12);
+      color: #e05c4d;
+      border: 1px solid rgba(192,57,43,.3);
+    }
+    .badge-new {
+      background: rgba(46,139,87,.12);
+      color: #5dc88a;
+      border: 1px solid rgba(46,139,87,.3);
+    }
+
+    .pub-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: .4rem;
+      transition: color .2s;
+    }
+    .pub-item:hover .pub-title { color: var(--amber); }
+
+    .pub-authors {
+      font-size: .88rem;
+      color: var(--muted);
+      margin-bottom: .3rem;
+    }
+    .pub-authors strong { color: var(--body); font-weight: 400; }
+
+    .pub-venue-line {
+      font-size: .88rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: .8rem;
+    }
+
+    .pub-links {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+    }
+    .pub-link {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+      transition: color .2s, border-color .2s;
+    }
+    .pub-link:hover { color: var(--amber); border-color: var(--amber); }
+
+    /* ═══════════════════════════════════════════
+       PROJECTS / RESEARCH
+    ═══════════════════════════════════════════ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .2s;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 0;
+      background: var(--amber);
+      transition: height .35s var(--ease-out);
+    }
+    .project-card:hover::before { height: 100%; }
+    .project-card:hover { background: #1c1c1c; }
+
+    .project-num {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .15em;
+      color: var(--amber-dim);
+      margin-bottom: 1.2rem;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: .75rem;
+      transition: color .2s;
+    }
+    .project-card:hover .project-title { color: var(--amber); }
+
+    .project-desc {
+      font-size: .9rem;
+      color: var(--body);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: 1.5rem;
+    }
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      padding: .2rem .55rem;
+      border: 1px solid var(--border);
+    }
+
+    .project-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s, gap .2s;
+    }
+    .project-card:hover .project-arrow { color: var(--amber); gap: .6rem; }
+
+    /* ═══════════════════════════════════════════
+       EXPERIENCE / TIMELINE
+    ═══════════════════════════════════════════ */
+    .timeline {
+      margin-top: 3rem;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 8.5rem;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 9rem 1fr;
+      gap: 0 2rem;
+      padding: 0 0 3rem;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-date {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      text-align: right;
+      padding-top: .2rem;
+      line-height: 1.5;
+    }
+
+    .tl-dot {
+      position: absolute;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--amber);
+      left: calc(8.5rem - 4px);
+      margin-top: .25rem;
+      transition: background .2s;
+    }
+    .tl-item:hover .tl-dot { background: var(--amber); }
+
+    .tl-body {
+      padding-left: 1rem;
+    }
+    .tl-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: .2rem;
+    }
+    .tl-org {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      color: var(--amber);
+      margin-bottom: .6rem;
+    }
+    .tl-desc {
+      font-size: .9rem;
+      color: var(--body);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════ */
+    #contact {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .contact-big {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+    .contact-big em { font-style: italic; color: var(--amber); }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--body);
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    .contact-email {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      letter-spacing: .08em;
+      color: var(--amber);
+      border-bottom: 1px solid var(--amber-dim);
+      padding-bottom: 2px;
+      margin-bottom: 3rem;
+      transition: border-color .2s;
+    }
+    .contact-email:hover { border-color: var(--amber); }
+
+    .contact-socials {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    footer p {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--muted);
+    }
+    footer p span { color: var(--amber); }
+
+    /* ═══════════════════════════════════════════
+       REVEAL ANIMATIONS (scroll)
+    ═══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .45s; }
+
+    /* ═══════════════════════════════════════════
+       KEYFRAMES
+    ═══════════════════════════════════════════ */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollBob {
+      0%, 100% { opacity: .3; transform: translateY(-2px); }
+      50%       { opacity: 1; transform: translateY(2px); }
+    }
+
+    /* ═══════════════════════════════════════════
+       MOBILE NAV DRAWER
+    ═══════════════════════════════════════════ */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 280px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 200;
+      padding: 5rem 2rem 2rem;
+      flex-direction: column;
+      gap: 1.5rem;
+      transform: translateX(100%);
+      transition: transform .35s var(--ease-out);
+    }
+    .mobile-nav.open {
+      transform: translateX(0);
+    }
+    .mobile-nav a {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--body);
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color .2s;
+    }
+    .mobile-nav a:hover { color: var(--amber); }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 190;
+    }
+    .mobile-overlay.open { display: block; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr; gap: 3rem; }
+      .timeline::before { left: 0; }
+      .tl-item { grid-template-columns: 1fr; gap: .3rem; }
+      .tl-date { text-align: left; }
+      .tl-dot { left: -4px; }
+      .tl-body { padding-left: 0; }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+      body { cursor: auto; }
+      #cursor { display: none; }
+      .hero-name { font-size: clamp(2.8rem, 12vw, 5rem); }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── CURSOR ─────────────────────────────── -->
+<div id="cursor"></div>
+
+<!-- ─── DOT GRID ───────────────────────────── -->
+<canvas id="dot-grid"></canvas>
+
+<!-- ─── NAV ────────────────────────────────── -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">Y<span>.</span>Name</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#publications">Research</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── MOBILE NAV ──────────────────────────── -->
+<div class="mobile-overlay" id="overlay"></div>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#about">About</a>
+  <a href="#publications">Research</a>
+  <a href="#projects">Projects</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">PhD Candidate · University of Florida</p>
+    <h1 class="hero-name">Your<br><em>Name</em></h1>
+    <p class="hero-role">
+      Researcher in urban computing, spatial AI, and accessible mobility —
+      building systems that understand the built environment.
+    </p>
+    <div class="hero-ctas">
+      <a href="#publications" class="btn-primary">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M6 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Research
+      </a>
+      <a href="resume.pdf" class="btn-ghost" target="_blank" rel="noopener">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 1h8v10H2zM4 4h4M4 6.5h4M4 9h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Curriculum Vitae
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    Scroll
+    <div class="scroll-arrow">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════ -->
+<section id="about" class="section-wrap">
+  <div class="container">
+    <div class="grid-2">
+
+      <!-- left: photo + stats -->
+      <div class="about-photo-col reveal">
+        <div class="about-photo-frame">
+          <!-- Replace src with your actual photo -->
+          <!-- <img src="photo.jpg" alt="Your Name" /> -->
+          <div class="photo-placeholder">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="18" r="9" stroke="#555" stroke-width="1.5"/>
+              <path d="M6 42c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <p>Add photo.jpg<br>to your repo</p>
+          </div>
+        </div>
+
+        <div class="about-stats">
+          <div class="stat-box">
+            <span class="stat-num">12</span>
+            <div class="stat-label">Publications</div>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">340+</span>
+            <div class="stat-label">Citations</div>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">3</span>
+            <div class="stat-label">Best Paper</div>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">5+</span>
+            <div class="stat-label">Years Research</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right: bio -->
+      <div class="about-text-col">
+        <div class="reveal">
+          <p class="section-label">About Me</p>
+          <h2 class="section-title">Building tools that<br><em>see the city</em></h2>
+        </div>
+        <div class="about-bio reveal reveal-delay-1">
+          <p>
+            I'm a PhD candidate in the <strong>Department of Urban and Regional Planning</strong>
+            at the University of Florida, advised by
+            <a href="#">Prof. Shenhao Wang</a>. My research sits at the intersection of
+            <strong>machine learning, street-level imagery, and urban accessibility</strong> —
+            specifically, how we can use vision-language models and large-scale geospatial
+            data to understand and improve the mobility environment for people with disabilities.
+          </p>
+          <p>
+            Before my PhD, I received a B.Sc. in Civil Engineering from [University] and
+            spent two years as a data analyst at [Company]. I'm a recipient of the
+            <strong>NSF Graduate Research Fellowship</strong> and the ACM ASSETS Best
+            Student Paper Award (2024).
+          </p>
+        </div>
+        <div class="about-interests reveal reveal-delay-2">
+          <span class="interest-tag">Urban Computing</span>
+          <span class="interest-tag">Accessibility</span>
+          <span class="interest-tag">Vision-Language Models</span>
+          <span class="interest-tag">Street View Imagery</span>
+          <span class="interest-tag">Spatiotemporal GNNs</span>
+          <span class="interest-tag">Wheelchair Navigation</span>
+          <span class="interest-tag">GIS</span>
+        </div>
+        <div class="about-links reveal reveal-delay-3">
+          <a href="mailto:you@ufl.edu" class="icon-link">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1 3.5l5.5 4L12 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Email
+          </a>
+          <a href="https://scholar.google.com" class="icon-link" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 2v4.5l3 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Scholar
+          </a>
+          <a href="https://github.com/yourusername" class="icon-link" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1C3.462 1 1 3.462 1 6.5c0 2.434 1.578 4.5 3.763 5.229.275.05.375-.119.375-.265 0-.13-.005-.565-.007-1.02-1.53.332-1.853-.649-1.853-.649-.25-.636-.611-.805-.611-.805-.5-.341.037-.335.037-.335.553.039.844.568.844.568.492.843 1.29.6 1.604.458.05-.356.192-.6.35-.737C3.87 9.53 2.59 9.06 2.59 7c0-.541.193-1.023.51-1.383-.051-.125-.221-.654.048-1.364 0 0 .416-.133 1.362.508a4.739 4.739 0 011.245-.168c.423.002.849.057 1.245.168.944-.641 1.36-.508 1.36-.508.27.71.1 1.239.049 1.364.317.36.509.842.509 1.383 0 2.065-1.282 2.529-2.504 2.663.197.17.373.504.373.98 0 .708-.007 1.279-.007 1.452 0 .147.099.318.378.264C10.424 11 12 8.932 12 6.5 12 3.462 9.538 1 6.5 1z" fill="currentColor"/></svg>
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/yourusername" class="icon-link" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 5.5V9.5M3.5 3.5v.5M6 9.5v-2c0-1.1.9-2 2-2s2 .9 2 2v2M6 5.5V9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://twitter.com/yourhandle" class="icon-link" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 1.5l4.1 5.4L1.5 11.5h1.2l3.6-4.1 2.9 4.1H11.5L7.2 5.9 11 1.5H9.8L6.6 5.3 3.7 1.5H1.5z" fill="currentColor"/></svg>
+            Twitter / X
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PUBLICATIONS
+═══════════════════════════════════════════ -->
+<section id="publications" class="section-wrap">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Selected Publications</p>
+      <h2 class="section-title">Research &amp; <em>Writing</em></h2>
+      <p class="section-desc">
+        Peer-reviewed work in human-computer interaction, urban computing, and accessibility AI.
+        Full list on <a href="https://scholar.google.com" style="color:var(--amber)">Google Scholar</a>.
+      </p>
+    </div>
+
+    <div class="pub-list">
+
+      <!-- PUB 1 -->
+      <div class="pub-item reveal">
+        <div class="pub-year">2024</div>
+        <div class="pub-content">
+          <div class="pub-badges">
+            <span class="badge badge-venue">ACM CHI 2024</span>
+            <span class="badge badge-award">🏆 Best Paper</span>
+          </div>
+          <div class="pub-title">
+            Towards LLM-Assisted Wheelchair Accessibility Assessment from Street View Imagery
+          </div>
+          <div class="pub-authors">
+            <strong>Your Name</strong>, Collaborator A, Collaborator B, Shenhao Wang
+          </div>
+          <div class="pub-venue-line">
+            ACM Conference on Human Factors in Computing Systems (CHI), Honolulu, HI.
+          </div>
+          <div class="pub-links">
+            <a href="#" class="pub-link">PDF</a>
+            <a href="#" class="pub-link">arXiv</a>
+            <a href="#" class="pub-link">Code</a>
+            <a href="#" class="pub-link">Demo</a>
+            <a href="#" class="pub-link">Slides</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUB 2 -->
+      <div class="pub-item reveal reveal-delay-1">
+        <div class="pub-year">2024</div>
+        <div class="pub-content">
+          <div class="pub-badges">
+            <span class="badge badge-venue">SIGSPATIAL 2024</span>
+            <span class="badge badge-new">New</span>
+          </div>
+          <div class="pub-title">
+            SAUC: Sparsity-Aware Uncertainty Calibration for Spatiotemporal Prediction with Graph Neural Networks
+          </div>
+          <div class="pub-authors">
+            Dingyi Zhuang, Yuheng Bu, Guang Wang, <strong>Your Name</strong>, Jinhua Zhao
+          </div>
+          <div class="pub-venue-line">
+            ACM SIGSPATIAL, Atlanta, GA. <em>doi:10.1145/3678717.3691241</em>
+          </div>
+          <div class="pub-links">
+            <a href="#" class="pub-link">PDF</a>
+            <a href="#" class="pub-link">arXiv</a>
+            <a href="#" class="pub-link">Code</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUB 3 -->
+      <div class="pub-item reveal reveal-delay-2">
+        <div class="pub-year">2023</div>
+        <div class="pub-content">
+          <div class="pub-badges">
+            <span class="badge badge-venue">ACM ASSETS 2023</span>
+          </div>
+          <div class="pub-title">
+            Virtual Accessibility Auditing at Scale: Deep Learning Approaches Using Street View Panoramas
+          </div>
+          <div class="pub-authors">
+            <strong>Your Name</strong>, Collaborator C, Jon E. Froehlich
+          </div>
+          <div class="pub-venue-line">
+            ACM Conference on Assistive Technology, New York, NY.
+          </div>
+          <div class="pub-links">
+            <a href="#" class="pub-link">PDF</a>
+            <a href="#" class="pub-link">arXiv</a>
+            <a href="#" class="pub-link">Dataset</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PUB 4 -->
+      <div class="pub-item reveal reveal-delay-3">
+        <div class="pub-year">2022</div>
+        <div class="pub-content">
+          <div class="pub-badges">
+            <span class="badge badge-venue">Transportation Research Part C</span>
+          </div>
+          <div class="pub-title">
+            Urban Accessibility Mapping Using Multimodal Foundation Models: A Global-Scale Feasibility Study
+          </div>
+          <div class="pub-authors">
+            <strong>Your Name</strong>, Collaborator D, Collaborator E
+          </div>
+          <div class="pub-venue-line">
+            Transportation Research Part C: Emerging Technologies, 145, 103926.
+          </div>
+          <div class="pub-links">
+            <a href="#" class="pub-link">PDF</a>
+            <a href="#" class="pub-link">DOI</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+═══════════════════════════════════════════ -->
+<section id="projects" class="section-wrap">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Selected Projects</p>
+      <h2 class="section-title">Tools &amp; <em>Code</em></h2>
+      <p class="section-desc">Open-source software and datasets from my research program.</p>
+    </div>
+
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-num">01 / open source</div>
+        <div class="project-title">WheelRoute: Wheelchair-Aware A* Routing Engine</div>
+        <div class="project-desc">
+          An open-source routing engine that integrates GSV-derived accessibility
+          scores into pedestrian graph weights, producing wheelchair-specific A-to-B routes.
+          Used by [N] municipalities.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">OSMnx</span>
+          <span class="tech-tag">PyTorch</span>
+          <span class="tech-tag">FastAPI</span>
+        </div>
+        <a href="https://github.com/yourusername/wheelroute" class="project-arrow" target="_blank" rel="noopener">
+          View on GitHub
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-num">02 / dataset</div>
+        <div class="project-title">AccessBench: Wheelchair Accessibility Labels for 50K GSV Panoramas</div>
+        <div class="project-desc">
+          A benchmark dataset of 50,000 Google Street View panoramas labeled
+          by wheelchair users for curb ramp quality, surface condition, and sidewalk width.
+          Enables training and evaluation of VLMs on accessibility tasks.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Dataset</span>
+          <span class="tech-tag">HuggingFace</span>
+          <span class="tech-tag">GSV</span>
+          <span class="tech-tag">Annotation</span>
+        </div>
+        <a href="#" class="project-arrow">
+          HuggingFace Dataset
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-num">03 / tool</div>
+        <div class="project-title">ST-AccessAudit: Spatiotemporal Accessibility Monitoring Dashboard</div>
+        <div class="project-desc">
+          An interactive web dashboard for cities to track changes in pedestrian
+          infrastructure accessibility over time, powered by automated GSV analysis
+          and crowdsourced reporting.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">MapLibre GL</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">PostgreSQL</span>
+        </div>
+        <a href="#" class="project-arrow">
+          Live Demo
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-num">04 / research code</div>
+        <div class="project-title">SAUC: Sparsity-Aware Uncertainty Calibration for ST-GNNs</div>
+        <div class="project-desc">
+          Official implementation of SAUC (SIGSPATIAL 2024): a post-hoc framework
+          for calibrating uncertainty in spatiotemporal Graph Neural Networks on
+          sparse event data (traffic crashes, urban crime).
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">PyTorch</span>
+          <span class="tech-tag">PyTorch Geometric</span>
+          <span class="tech-tag">Uncertainty</span>
+          <span class="tech-tag">GNN</span>
+        </div>
+        <a href="https://github.com/AnonymousSAUC/SAUC" class="project-arrow" target="_blank" rel="noopener">
+          View on GitHub
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════════ -->
+<section id="experience" class="section-wrap">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Experience &amp; Education</p>
+      <h2 class="section-title"><em>Academic</em> Journey</h2>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-date">2022 — Present</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-title">PhD Candidate, Urban &amp; Regional Planning</div>
+          <div class="tl-org">University of Florida · Gainesville, FL</div>
+          <div class="tl-desc">
+            Dissertation: <em>"Towards Multimodal LLM-Based Accessibility Assessment for Wheelchair Navigation Using Street View Imagery."</em>
+            Advised by Prof. Shenhao Wang. NSF GRFP Fellow.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-1">
+        <div class="tl-date">Summer 2023</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-title">Research Intern</div>
+          <div class="tl-org">MIT Senseable City Lab · Cambridge, MA</div>
+          <div class="tl-desc">
+            Worked with Prof. Carlo Ratti's group on large-scale street view analysis for
+            urban mobility. Developed the first benchmark dataset for LLM-based accessibility
+            classification of pedestrian infrastructure.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-2">
+        <div class="tl-date">2020 — 2022</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-title">Data Analyst</div>
+          <div class="tl-org">Company Name · City, State</div>
+          <div class="tl-desc">
+            Built predictive models for urban infrastructure condition assessment.
+            Led a team of 3 engineers in developing an automated pavement deterioration
+            detection pipeline using satellite imagery.
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-delay-3">
+        <div class="tl-date">2016 — 2020</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-title">B.Sc. Civil Engineering, <em>Summa Cum Laude</em></div>
+          <div class="tl-org">Your Undergraduate University · City, Country</div>
+          <div class="tl-desc">
+            Thesis on geospatial analysis of pedestrian infrastructure. GPA: 3.97/4.0.
+            Undergraduate Research Award, Dean's List all semesters.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════ -->
+<section id="contact" class="container">
+  <div class="reveal">
+    <p class="section-label" style="justify-content:center">Get in Touch</p>
+    <h2 class="contact-big">Let's <em>collaborate.</em></h2>
+    <p class="contact-sub">
+      Open to research collaborations, speaking invitations, and PhD student inquiries.
+    </p>
+    <a href="mailto:yourname@ufl.edu" class="contact-email">yourname@ufl.edu</a>
+    <div class="contact-socials">
+      <a href="mailto:yourname@ufl.edu" class="btn-primary">
+        Send an Email
+      </a>
+      <a href="resume.pdf" class="btn-ghost" target="_blank" rel="noopener">
+        Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ──────────────────────────────── -->
+<footer>
+  <p>© <span id="year"></span> <span>Your Name</span> · Built with plain HTML/CSS</p>
+  <p style="font-size:.6rem">Gainesville, Florida</p>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ── year ─────────────────────────────── */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ── custom cursor ────────────────────── */
+const cursor = document.getElementById('cursor');
+let cx = 0, cy = 0, tx = 0, ty = 0;
+
+document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+
+(function loop() {
+  cx += (tx - cx) * 0.18;
+  cy += (ty - cy) * 0.18;
+  cursor.style.left = cx + 'px';
+  cursor.style.top  = cy + 'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a, button, .project-card, .pub-item, .tl-item').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+});
+
+/* ── dot grid canvas ──────────────────── */
+(function () {
+  const canvas = document.getElementById('dot-grid');
+  const ctx = canvas.getContext('2d');
+  let W, H, cols, rows, dots = [];
+  let mouseX = -9999, mouseY = -9999;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cols = Math.floor(W / 36);
+    rows = Math.floor(H / 36);
+    dots = [];
+    for (let r = 0; r <= rows; r++) {
+      for (let c = 0; c <= cols; c++) {
+        dots.push({
+          x: (c / cols) * W,
+          y: (r / rows) * H,
+          base: Math.random() * .3 + .05
+        });
+      }
+    }
+  }
+
+  window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach(d => {
+      const dx = d.x - mouseX, dy = d.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const influence = Math.max(0, 1 - dist / 200);
+      const r = d.base + influence * 1.4;
+      const alpha = d.base + influence * 0.6;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212,146,42,${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+})();
+
+/* ── nav scroll ───────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+/* ── scroll reveal ────────────────────── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+/* ── mobile nav ───────────────────────── */
+const burger     = document.getElementById('burger');
+const mobileNav  = document.getElementById('mobile-nav');
+const overlay    = document.getElementById('overlay');
+let open = false;
+
+function toggleMenu() {
+  open = !open;
+  mobileNav.classList.toggle('open', open);
+  overlay.classList.toggle('open', open);
+  // animate burger to X
+  const spans = burger.querySelectorAll('span');
+  if (open) {
+    spans[0].style.transform = 'translateY(6.5px) rotate(45deg)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }
+}
+
+burger.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', toggleMenu);
+mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', toggleMenu));
+</script>
+
+</body>
+</html>
