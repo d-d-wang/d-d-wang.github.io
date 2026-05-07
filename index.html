@@ -1342,88 +1342,94 @@
   <div class="container">
     <div class="reveal">
       <p class="section-label">Selected Projects</p>
-      <h2 class="section-title">Tools &amp; <em>Code</em></h2>
-      <p class="section-desc">Open-source software and datasets from my research program.</p>
+      <h2 class="section-title">Research &amp; <em>Systems</em></h2>
+      <p class="section-desc">
+        Representative projects spanning multimodal learning, smart cities, and AI for infrastructure systems.
+      </p>
     </div>
 
     <div class="projects-grid">
 
+      <!-- Project 1 -->
       <div class="project-card reveal">
-        <div class="project-num">01 / open source</div>
-        <div class="project-title">WheelRoute: Wheelchair-Aware A* Routing Engine</div>
+        <div class="project-num">01 / research framework</div>
+        <div class="project-title">UQ-GNN: Uncertainty-Aware Spatiotemporal Graph Learning</div>
         <div class="project-desc">
-          An open-source routing engine that integrates GSV-derived accessibility
-          scores into pedestrian graph weights, producing wheelchair-specific A-to-B routes.
-          Used by [N] municipalities.
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">OSMnx</span>
-          <span class="tech-tag">PyTorch</span>
-          <span class="tech-tag">FastAPI</span>
-        </div>
-        <a href="https://github.com/yourusername/wheelroute" class="project-arrow" target="_blank" rel="noopener">
-          View on GitHub
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div class="project-card reveal reveal-delay-1">
-        <div class="project-num">02 / dataset</div>
-        <div class="project-title">AccessBench: Wheelchair Accessibility Labels for 50K GSV Panoramas</div>
-        <div class="project-desc">
-          A benchmark dataset of 50,000 Google Street View panoramas labeled
-          by wheelchair users for curb ramp quality, surface condition, and sidewalk width.
-          Enables training and evaluation of VLMs on accessibility tasks.
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">Dataset</span>
-          <span class="tech-tag">HuggingFace</span>
-          <span class="tech-tag">GSV</span>
-          <span class="tech-tag">Annotation</span>
-        </div>
-        <a href="#" class="project-arrow">
-          HuggingFace Dataset
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div class="project-card reveal reveal-delay-2">
-        <div class="project-num">03 / tool</div>
-        <div class="project-title">ST-AccessAudit: Spatiotemporal Accessibility Monitoring Dashboard</div>
-        <div class="project-desc">
-          An interactive web dashboard for cities to track changes in pedestrian
-          infrastructure accessibility over time, powered by automated GSV analysis
-          and crowdsourced reporting.
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">React</span>
-          <span class="tech-tag">MapLibre GL</span>
-          <span class="tech-tag">Node.js</span>
-          <span class="tech-tag">PostgreSQL</span>
-        </div>
-        <a href="#" class="project-arrow">
-          Live Demo
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div class="project-card reveal reveal-delay-3">
-        <div class="project-num">04 / research code</div>
-        <div class="project-title">SAUC: Sparsity-Aware Uncertainty Calibration for ST-GNNs</div>
-        <div class="project-desc">
-          Official implementation of SAUC (SIGSPATIAL 2024): a post-hoc framework
-          for calibrating uncertainty in spatiotemporal Graph Neural Networks on
-          sparse event data (traffic crashes, urban crime).
+          A scalable graph neural network framework for multivariate probabilistic forecasting
+          in urban and energy systems. Models spatial-temporal interactions across heterogeneous
+          data sources and produces calibrated uncertainty for decision-making.
         </div>
         <div class="project-tech">
           <span class="tech-tag">PyTorch</span>
-          <span class="tech-tag">PyTorch Geometric</span>
-          <span class="tech-tag">Uncertainty</span>
           <span class="tech-tag">GNN</span>
+          <span class="tech-tag">Uncertainty</span>
+          <span class="tech-tag">Time Series</span>
         </div>
-        <a href="https://github.com/AnonymousSAUC/SAUC" class="project-arrow" target="_blank" rel="noopener">
-          View on GitHub
+        <a href="#" class="project-arrow">
+          Paper / Code
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-num">02 / benchmark</div>
+        <div class="project-title">USAI-Bench: Multimodal Urban Intelligence Benchmark</div>
+        <div class="project-desc">
+          A large-scale benchmark for evaluating vision-language models on quantitative reasoning
+          over urban environments using remote sensing imagery and structured spatial metrics.
+          Supports multi-level reasoning and multimodal evaluation.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">VLM</span>
+          <span class="tech-tag">Remote Sensing</span>
+          <span class="tech-tag">Benchmark</span>
+          <span class="tech-tag">QA</span>
+        </div>
+        <a href="#" class="project-arrow">
+          Dataset / Benchmark
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-num">03 / applied AI</div>
+        <div class="project-title">Street-Level Accessibility Assessment with Vision-Language Models</div>
+        <div class="project-desc">
+          A framework for evaluating pedestrian accessibility using street-view imagery.
+          Integrates multimodal models to assess wheelchair navigation conditions and
+          produces structured scores aligned with human mobility experience.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Computer Vision</span>
+          <span class="tech-tag">LLM/VLM</span>
+          <span class="tech-tag">Street View</span>
+          <span class="tech-tag">Accessibility</span>
+        </div>
+        <a href="#" class="project-arrow">
+          Paper / Demo
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-num">04 / system deployment</div>
+        <div class="project-title">Sensor Fusion for Real-Time Traffic Safety Analytics</div>
+        <div class="project-desc">
+          Large-scale system integrating multi-sensor data (CCTV, radar, LiDAR, thermal)
+          for real-time traffic monitoring and safety analysis. Supports anomaly detection,
+          behavior modeling, and deployment across highway systems.
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Sensor Fusion</span>
+          <span class="tech-tag">Computer Vision</span>
+          <span class="tech-tag">Big Data</span>
+          <span class="tech-tag">ITS</span>
+        </div>
+        <a href="#" class="project-arrow">
+          Project Details
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
